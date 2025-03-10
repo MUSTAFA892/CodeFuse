@@ -127,4 +127,123 @@ Make sure all the necessary dependencies are installed by running:
 bun install
 ```
 
-    
+Sure! Here’s the continuation of your `README.md` file, including the new steps you mentioned:
+
+
+## 8. Migrate Prisma Database
+
+To migrate the Prisma database, navigate to the `packages/db` folder and run the following command:
+
+```bash
+cd packages/db
+npx prisma migrate dev
+```
+
+This will apply the migrations to the PostgreSQL database and sync it with the schema defined in your Prisma setup.
+
+## 9. Start the Frontend
+
+To start the frontend application, go to the `apps/frontend` directory and run the following command to start the development server using Bun:
+
+```bash
+cd apps/frontend
+bun dev
+```
+
+This will start the frontend application and make it available for local development.
+
+## 10. Start the Backend
+
+To start the backend server, navigate to the `apps/primary-backend` directory and run the following command to start the backend:
+
+```bash
+cd apps/primary-backend
+bun index.ts
+```
+
+This will start the backend server, and it should now be running and ready to handle requests.
+
+## 11. Add API Keys to .env
+
+Make sure to configure all necessary API keys in your `.env` file. You can reference the `.env.example` file to see which keys need to be added.
+
+To copy the example `.env` file to your actual `.env` file, use the following command:
+
+```bash
+cp .env.example .env
+```
+
+Then, open the `.env` file and add all the required API keys and environment-specific variables.
+
+## 12. Start the LLM Backend
+
+Finally, to start the LLM (Large Language Model) backend, go to the `apps/worker` directory and run the following command:
+
+```bash
+cd apps/worker
+bun dev
+```
+
+Here is the continuation of the README with the steps to sign in to Clerk, update the JWT key, and set the Clerk-related environment variables (`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`) as per the `.env.example` file:
+
+## 13. Sign In to Clerk
+
+Clerk is used for authentication and managing user sessions in the application. To integrate Clerk into your project, you'll need to sign in to Clerk and configure the required keys.
+
+### Sign Up / Sign In to Clerk
+
+1. Go to the [Clerk dashboard](https://clerk.dev) and sign up for an account or log in if you already have one.
+2. Once logged in, go to the **API Keys** section in the Clerk dashboard.
+3. Obtain the following keys:
+    - **Publishable Key** (`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`)
+    - **Secret Key** (`CLERK_SECRET_KEY`)
+
+### Update `.env` with Clerk Keys
+
+After obtaining the Clerk keys, you'll need to update your `.env` file with the values for `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`.
+
+1. Copy the keys from your Clerk dashboard.
+2. Open the `.env` file in the root of your project.
+3. Update the environment variables with the following:
+
+```bash
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
+CLERK_SECRET_KEY=your-clerk-secret-key
+```
+
+Make sure to replace `your-clerk-publishable-key` and `your-clerk-secret-key` with the actual keys from Clerk.
+
+### Update JWT Key
+
+You may also need to update the JWT key in your `.env` file, depending on your Clerk configuration. For example:
+
+```bash
+JWT_KEY=your-jwt-secret-key
+```
+
+Ensure that all keys are correctly updated and saved.
+
+## 14. Restart the Application
+
+After updating the environment variables, restart all services (frontend, backend, and worker) to apply the changes.
+
+1. Restart the frontend:
+
+    ```bash
+    cd apps/frontend
+    bun dev
+    ```
+
+2. Restart the backend:
+
+    ```bash
+    cd apps/primary-backend
+    bun index.ts
+    ```
+
+3. Restart the LLM worker:
+
+    ```bash
+    cd apps/worker
+    bun dev
+    ```

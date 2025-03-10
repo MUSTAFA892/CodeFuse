@@ -17,11 +17,11 @@ app.use(express.json());
 // Set up the Gemini API URL
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
-// Use the GEMINI_API_KEY from the environment variables
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+// Use the ANTHROPIC_API_KEY from the environment variables
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
-if (!GEMINI_API_KEY) {
-  throw new Error("API key not found. Please set the GEMINI_API_KEY environment variable.");
+if (!ANTHROPIC_API_KEY) {
+  throw new Error("API key not found. Please set the ANTHROPIC_API_KEY environment variable.");
 }
 
 app.post("/prompt", async (req, res) => {
@@ -63,7 +63,7 @@ app.post("/prompt", async (req, res) => {
   try {
     // Make the POST request to the Gemini API
     const response = await axios.post(
-      `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+      `${GEMINI_API_URL}?key=${ANTHROPIC_API_KEY}`,
       {
         contents: [
           {
