@@ -247,3 +247,159 @@ After updating the environment variables, restart all services (frontend, backen
     cd apps/worker
     bun dev
     ```
+
+
+## 15. Running All Services in the `apps` Folder
+
+To run all the services in the `apps` folder, follow these steps:
+
+1. **Frontend Service**: Go to the `apps/frontend` directory and run the development server using Bun:
+
+    ```bash
+    cd apps/frontend
+    bun dev
+    ```
+
+2. **Backend Service**: Next, navigate to the `apps/primary-backend` directory and start the backend server:
+
+    ```bash
+    cd apps/primary-backend
+    bun index.ts
+    ```
+
+3. **Worker Service**: Lastly, navigate to the `apps/worker` directory and start the worker service:
+
+    ```bash
+    cd apps/worker
+    bun dev
+    ```
+
+### Start All Services Simultaneously
+
+If you'd prefer to run all services in parallel, you can either use a tool like `concurrently` or manually open separate terminal tabs for each service. Here's an example of using `concurrently`:
+
+1. Install `concurrently`:
+
+    ```bash
+    bun add concurrently
+    ```
+
+2. Create a new script in your `package.json` to run all services:
+
+    ```json
+    "scripts": {
+      "start:all": "concurrently \"bun dev --cwd apps/frontend\" \"bun index.ts --cwd apps/primary-backend\" \"bun dev --cwd apps/worker\""
+    }
+    ```
+
+3. Then, run the command:
+
+    ```bash
+    bun start:all
+    ```
+
+This will run the frontend, backend, and worker services simultaneously in your terminal.
+
+---
+
+## 16. Troubleshooting Errors
+
+Here are some common errors you may encounter and their resolutions:
+
+### Error 1: **404 Not Found in Kubernetes API**
+
+You might encounter the following error when interacting with Kubernetes resources:
+
+```bash
+error: HTTP-Code: 404
+Message: Unknown API Status Code!
+Body: "Not found."
+```
+
+This error typically indicates that the Kubernetes resource you're trying to access doesn't exist or the API server is not reachable. Here’s how to resolve it:
+
+- **Verify Kubernetes Cluster Connection**: Ensure your Kubernetes cluster is running and accessible. You can check the connection by running the following command:
+
+    ```bash
+    kubectl get pods --all-namespaces
+    ```
+
+    If you see an error, check your Kubernetes configuration and ensure it's pointing to the correct cluster.
+
+- **Check Resource Existence**: The resource you're trying to access may not exist, such as a specific namespace or pod. Use the following commands to verify the existence of resources like namespaces:
+
+    ```bash
+    kubectl get namespaces
+    ```
+
+    If the namespace doesn’t exist, create it:
+
+    ```bash
+    kubectl create namespace user-apps
+    ```
+
+- **Check the Correct API Endpoint**: Ensure the correct API path is being used in your code. If you're trying to create or list resources in a specific namespace, ensure that the namespace exists and is correctly referenced.
+
+### Error 2: **"current-context must exist" Error**
+
+When running the command to view the Kubernetes configuration, you might see the following error:
+
+```bash
+error: current-context must exist in order to minify
+```
+
+This indicates that there is no current context set in your Kubernetes configuration, which is necessary to interact with the cluster. To resolve this:
+
+- **Check Kubernetes Configuration**: Ensure your `kubectl` context is properly set. Run:
+
+    ```bash
+    kubectl config get-contexts
+    ```
+
+    Then, set the correct context:
+
+    ```bash
+    kubectl config use-context <your-context-name>
+    ```
+
+    Replace `<your-context-name>` with the appropriate context.
+
+- **Verify Context Configuration**: If no contexts are set, you might need to authenticate with your Kubernetes provider (e.g., AWS EKS, GKE, etc.) to set the context correctly.
+
+### Error 3: **Docker-related Issues**
+
+When building and running Docker images, you might encounter errors. Some potential issues include:
+
+- **Docker Not Found**: Ensure Docker is installed on your system. If it isn't, install Docker using the official instructions for your operating system:
+
+    - [Docker Installation Guide](https://docs.docker.com/get-docker/)
+
+- **Permission Denied Errors**: You might encounter permission issues when trying to build or run Docker containers. Make sure you have the necessary permissions or try running the commands with `sudo`:
+
+    ```bash
+    sudo docker build -f Dockerfile.code-server -t code-server-update .
+    sudo docker run -p 8080:8080 code-server-update
+    ```
+
+---
+
+## 17. Additional Configuration and Notes
+
+- **.env Configuration**: Ensure your `.env` file is correctly configured with all required keys and variables for API integrations, database connections, and authentication. Use `.env.example` as a template and replace placeholders with actual values.
+  
+- **Database Initialization**: If you encounter issues with the database, ensure that PostgreSQL is properly initialized and the environment variables for database connections are correctly set in your `.env` file.
+
+    You can initialize PostgreSQL via Docker with the following command:
+
+    ```bash
+    docker run -e POSTGRES_PASSWORD=mypassword -p 5432:5432 postgres
+    ```
+
+    Or, for detached mode:
+
+    ```bash
+    docker run -d -e POSTGRES_PASSWORD=mypassword -p 5432:5432 postgres
+    ```
+
+- **API Keys and External Services**: For any external services like Clerk, ensure that your API keys are correctly configured in the `.env` file. Refer to the Clerk section of the README for specific instructions on setting up Clerk.
+
