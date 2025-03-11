@@ -181,7 +181,7 @@ Finally, to start the LLM (Large Language Model) backend, go to the `apps/worker
 
 ```bash
 cd apps/worker
-bun dev
+bun index.ts
 ```
 
 Here is the continuation of the README with the steps to sign in to Clerk, update the JWT key, and set the Clerk-related environment variables (`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`) as per the `.env.example` file:
